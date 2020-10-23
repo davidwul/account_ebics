@@ -21,7 +21,9 @@ class EbicsFile(models.Model):
                 {'process': self._process_pain002,
                  'unlink': self._unlink_pain002},
         }
-        return super._file_format_methods().update(res)
+        res.update(super()._file_format_methods())
+        
+        return res
 
     @api.multi
     def _process_pain002(self):
