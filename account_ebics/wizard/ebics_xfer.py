@@ -25,18 +25,18 @@ try:
     from fintech.ebics import EbicsKeyRing, EbicsBank, EbicsUser, EbicsClient,\
         EbicsFunctionalError, EbicsTechnicalError, EbicsVerificationError
     fintech.cryptolib = 'cryptography'
-    def Z53(self):
-        return self.download('Z53')
+    def Z53(self,**kwargs):
+        return self.download('Z53',kwargs)
     EbicsClient.Z53 = Z53
-    def Z54(self):
-        return self.download('Z54')
+    def Z54(self,**kwargs):
+        return self.download('Z54',kwargs)
     EbicsClient.Z54 = Z54
-    def Z52(self):
-        return self.download('Z52')
-    EbicsClient.Z54 = Z52
-    def Z01(self):
-        return self.download('Z01')
-    EbicsClient.Z54 = Z01
+    def Z52(self,**kwargs):
+        return self.download('Z52',kwargs)
+    EbicsClient.Z52 = Z52
+    def Z01(self,**kwargs):
+        return self.download('Z01',kwargs)
+    EbicsClient.Z01 = Z01
 except ImportError:
     EbicsBank = object
     _logger.warning('Failed to import fintech')
