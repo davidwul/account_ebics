@@ -4,7 +4,6 @@
 from odoo import api, models, _
 from odoo.exceptions import UserError
 
-
 class EbicsFile(models.Model):
     _inherit = 'ebics.file'
 
