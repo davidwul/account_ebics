@@ -8,7 +8,7 @@ from odoo.exceptions import UserError
 class EbicsFile(models.Model):
     _inherit = 'ebics.file'
 
-def _file_format_methods(self):
+    def _file_format_methods(self):
         """
         Extend this dictionary in order to add support
         for extra file formats.
