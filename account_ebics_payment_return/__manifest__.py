@@ -13,5 +13,5 @@
     'data': [
 #        'views/account_payment_order.xml',
     ],
-    'installable': False,
+    'installable': True,
 }
