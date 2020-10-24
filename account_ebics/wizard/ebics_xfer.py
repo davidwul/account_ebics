@@ -179,12 +179,6 @@ class EbicsXfer(models.TransientModel):
                         data = client.download(order_type, params=params)
                     ebics_files += self._handle_download_data(data, df)
                     success = True
-                kwargs = {k: v for k, v in params.items() if v}
-                try:
-                    method = getattr(client, order_type)
-                    data = method(**kwargs)
-                    ebics_files += self._handle_download_data(data, df)
-                    success = True
                 except EbicsFunctionalError:
                     e = exc_info()
                     self.note += '\n'
