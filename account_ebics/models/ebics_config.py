@@ -196,7 +196,6 @@ class EbicsConfig(models.Model):
         comodel_name='ebics.file.format',
         column1='config_id', column2='format_id',
         string='EBICS File Formats',
-        readonly=True, states={'draft': [('readonly', False)]},
     )
     state = fields.Selection(
         [('draft', 'Draft'),
