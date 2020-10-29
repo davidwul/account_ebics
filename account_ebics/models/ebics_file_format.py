@@ -81,7 +81,7 @@ class EbicsFileFormat(models.Model):
             'pain.008',
             'x_zzt',
             'x_z54',
-            'z_z53',
+            'x_z53',
         ]
         selection = [(x, x) for x in request_types]
         return selection
