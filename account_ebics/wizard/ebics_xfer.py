@@ -29,7 +29,6 @@ except ImportError:
     EbicsBank = object
     _logger.warning('Failed to import fintech')
 
-
 class EbicsBank(EbicsBank):
 
     def _next_order_id(self, partnerid):
