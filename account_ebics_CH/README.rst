@@ -6,7 +6,7 @@
 Upload Payment Order via EBICS
 ==============================
 
-This module allows to upload a Payment Order to the bank via the EBICS protocol.
+This module add specific regarding swiss banks
 
 Installation
 ============
@@ -14,15 +14,11 @@ Installation
 This module depends upon the following modules (cf. apps.odoo.com):
 
 - account_ebics
-- account_payment_order
 
 Usage
 =====
 
-Create your Payment Order and generate the bank file.
-Upload the generated file via the 'EBICS Upload' button on the payment order.
 
 Known issues / Roadmap
 ======================
 
- * Add support for multiple EBICS connections.
