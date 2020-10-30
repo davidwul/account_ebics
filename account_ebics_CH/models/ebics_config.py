@@ -3,7 +3,6 @@
 
 from odoo import  models
 
-
 class EbicsConfig(models.Model):
     _inherit = 'ebics.config'
 
