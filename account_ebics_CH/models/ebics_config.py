@@ -1,8 +1,7 @@
 # Copyright 2020 Compassion.
 # License LGPL-3 or later (http://www.gnu.org/licenses/lpgl).
 
-from odoo import api, models, _
-from odoo.exceptions import UserError
+from odoo import  models
 
 
 class EbicsConfig(models.Model):
