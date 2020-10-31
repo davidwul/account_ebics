@@ -17,6 +17,4 @@ class EbicsFileFormat(models.Model):
         return res
     
     def _display_name(self):
-        d_name = self.name + " (" + self.order_type+")"
-        
-        return d_name
+        self.display_name = self.name + " (" + self.order_type+")"
