@@ -17,4 +17,20 @@ class EbicsFileFormat(models.Model):
         return res
     
     def _display_name(self):
-        self.display_name = self.name + " (" + self.order_type+")"
+        for record in self:
+            record.display_name = record.name + " (" + record.order_type+")"
+
+    @api.multi
+    def name_get(self):
+        """ name_get() -> [(id, name), ...]
+
+        Returns a textual representation for the records in ``self``.
+        By default this is the value of the ``display_name`` field.
+
+        :return: list of pairs ``(id, text_repr)`` for each records
+        :rtype: list(tuple)
+        """
+        result = []
+        for record in self:
+            result.append((record.id, record.display_name))
+        return result
