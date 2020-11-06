@@ -2,11 +2,15 @@
 # License LGPL-3 or later (http://www.gnu.org/licenses/lpgl).
 
 from odoo import api, models, _
+from odoo.addons.l10n_ch_payment_return_sepa.models.errors import\
+    NoTransactionsError, FileAlreadyImported
 from odoo.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
+
 
 class EbicsFile(models.Model):
     _inherit = 'ebics.file'
-
     def _file_format_methods(self):
         """
         Extend this dictionary in order to add support
@@ -24,19 +28,21 @@ class EbicsFile(models.Model):
         
         return res
 
-    @api.multi
+    @staticmethod
     def _process_pain002(self):
         """ convert the file to a record of model payment return."""
+        _logger.info("Start import '%s'", self.name)
         try:
             import_module = 'l10n_ch_payment_return_sepa'
             self._check_import_module(import_module)
             values = {
                 'data_file': self.data,
-                'filename': self.filename
+                'filename': self.name
             }
             pr_import_obj = self.env['payment.return.import']
             pr_wiz_imp = pr_import_obj.create(values)
             import_result = pr_wiz_imp.import_file()
+
             payment_return = self.env["payment.return"].browse(import_result['res_id'])
             # Mark the file as imported, remove binary as it should be
             # attached to the statement.
@@ -50,13 +56,17 @@ class EbicsFile(models.Model):
             payment_return.action_confirm()
             _logger.info("[OK] import file '%s'", self.filename)
         except NoTransactionsError as e:
-            _logger.info(e.name, self.filename)
+            _logger.info('Exception: NO TRANSACTION_______________')
+
+            if e.object[0]['payment_order_id'] and not e.object[0]['transactions']:
+                po = self.env['account.payment.order'].browse(e.object[0]['payment_order_id'])
+                po.generated2uploaded()
             self.write({
                 'state': 'done',
                 'error_message': e.name
             })
         except FileAlreadyImported as e:
-            _logger.info(e.name, self.filename)
+            _logger.info(e.name, self.name)
             references = [x['reference'] for x in e.object[0]['transactions']]
             payment_return = self.env['payment.return']\
                 .search([('line_ids.reference', 'in', references)])
@@ -75,7 +85,7 @@ class EbicsFile(models.Model):
             # Write the error in the postfinance file
             if self.state != 'error':
                 self.write({
-                    'state': 'error',
+                    'state': 'draft',
                     'error_message': e.args and e.args[0]
                 })
                 # Here we must commit the error message otherwise it
@@ -84,7 +94,7 @@ class EbicsFile(models.Model):
                 self.env.cr.commit()
             _logger.error(
                 "[FAIL] import file '%s' to bank Statements",
-                self.filename,
+                self.name,
                 exc_info=True
             )
     def _unlink_pain002(self):
